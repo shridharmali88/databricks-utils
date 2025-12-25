@@ -12,6 +12,19 @@ display(df.select(lower_name(df.name).alias('lower_name'), '*'))
 
 # COMMAND ----------
 
+# DBTITLE 1,register UDF to use in SQL
+spark.udf.register("lower_name", lower_name)
+
+# COMMAND ----------
+
+# DBTITLE 1,EXPLAIN SQL query
 # MAGIC %sql
-# MAGIC -- EXPLAIN FORMATTED 
-# MAGIC
+# MAGIC EXPLAIN FORMATTED 
+# MAGIC select lower(name), count(*) from workspace.bronze.name group by lower(name)
+
+# COMMAND ----------
+
+# DBTITLE 1,EXPLAIN UDF based SQL query
+# MAGIC %sql
+# MAGIC EXPLAIN FORMATTED 
+# MAGIC select lower_name(name), count(*) from workspace.bronze.name group by lower_name(name)
